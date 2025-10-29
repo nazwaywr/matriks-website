@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Belajar Matriks — Interaktif</title>
+  <style>
+    :root{--bg:#0f172a;--card:#0b1220;--accent:#7c3aed;--muted:#94a3b8;--glass: rgba(255,255,255,0.03)}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#e6eef8;background:linear-gradient(180deg,#071024 0%, #07132a 60%);min-height:100vh}
+    header{padding:28px 20px;display:flex;align-items:center;gap:18px}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#06b6d4);display:flex;align-items:center;justify-content:center;font-weight:700;color:white;font-size:20px;box-shadow:0 6px 20px rgba(12,15,30,0.6)}
+    .title{line-height:1}
+    .title h1{margin:0;font-size:20px}
+    .title p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+
+    main{display:grid;grid-template-columns:360px 1fr;gap:20px;padding:12px 20px 80px}
+    @media (max-width:900px){main{grid-template-columns:1fr;padding:12px}}
+
+    .sidebar{background:var(--card);border-radius:14px;padding:16px;box-shadow:0 6px 20px rgba(2,6,23,0.6)}
+    .card{background:var(--glass);padding:14px;border-radius:12px;margin-bottom:12px}
+    h2{margin:0 0 8px 0;font-size:16px}
+    p.small{color:var(--muted);margin:0 0 10px;font-size:13px}
+    .btn{display:inline-block;padding:8px 12px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#06b6d4);color:white;text-decoration:none;font-weight:600;border:none;cursor:pointer}
+    .muted{color:var(--muted);font-size:13px}
+
+    /* content */
+    .content-wrap{display:flex;flex-direction:column;gap:14px}
+    .section{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 20px rgba(2,6,23,0.6)}
+    .example{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:12px;border-radius:10px}
+
+    /* matrix UI */
+    .matrix-input{display:grid;gap:8px}
+    .matrix-row{display:flex;gap:8px}
+    input.mat{width:64px;padding:8px;border-radius:8px;border:none;background:rgba(255,255,255,0.03);color:#e6eef8;text-align:center;font-weight:600}
+    label.inline{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+
+    .ops{display:flex;flex-wrap:wrap;gap:8px}
+    .op-btn{padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#dbeafe;cursor:pointer}
+
+    pre.output{background:#021024;padding:12px;border-radius:8px;color:#dbeafe;overflow:auto}
+
+    .practice{display:grid;gap:10px}
+    .problem{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:rgba(255,255,255,0.02)}
+    .small-muted{font-size:12px;color:var(--muted)}
+
+    footer{padding:18px;text-align:center;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">M</div>
+    <div class="title">
+      <h1>Belajar Matriks — Interaktif</h1>
+      <p>Pengantar, operasi, contoh & latihan — dirancang untuk pelajaran matematika</p>
+    </div>
+  </header>
+
+  <main>
+    <aside class="sidebar">
+      <div class="card">
+        <h2>Isi Materi</h2>
+        <p class="small muted">Klik pada bagian untuk lompat cepat</p>
+        <nav style="display:flex;flex-direction:column;gap:6px;margin-top:10px">
+          <a href="#intro" class="muted">• Pengertian Matriks</a>
+          <a href="#operasi" class="muted">• Operasi Matriks</a>
+          <a href="#interaktif" class="muted">• Kalkulator Interaktif</a>
+          <a href="#contoh" class="muted">• Contoh & Langkah</a>
+          <a href="#latihan" class="muted">• Latihan</a>
+        </nav>
+      </div>
+
+      <div class="card">
+        <h2>Petunjuk singkat</h2>
+        <p class="small muted">Gunakan kalkulator interaktif untuk mencoba penjumlahan, perkalian, transpose, dan determinan (untuk matriks kotak). Lihat langkah untuk memahami alur perhitungan.</p>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn" onclick="scrollToSection('interaktif')">Coba Kalkulator</button>
+          <button class="op-btn" onclick="resetAll()">Reset</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Tingkat</h2>
+        <p class="small muted">Cocok untuk siswa SMA & mahasiswa awal. Materi mencakup: definisi, operasi dasar, perkalian, transpose, dan determinan sederhana.</p>
+      </div>
+    </aside>
+
+    <section class="content-wrap">
+      <article id="intro" class="section">
+        <h2>Pengertian Matriks</h2>
+        <p class="small muted">Matriks adalah susunan bilangan, simbol, atau ekspresi yang disusun dalam baris dan kolom. Matriks berukuran m×n memiliki m baris dan n kolom.</p>
+        <div class="example">
+          <strong>Contoh:</strong>
+          <pre class="output">A = [ 1  2  3
+      4  5  6 ]   (2×3)</pre>
+        </div>
+      </article>
+
+      <article id="operasi" class="section">
+        <h2>Operasi Matriks</h2>
+        <div style="display:grid;gap:10px">
+          <div>
+            <strong>Penjumlahan & Pengurangan</strong>
+            <p class="small-muted">Hanya untuk matriks berukuran sama. Jumlahkan elemen yang bersesuaian.</p>
+          </div>
+          <div>
+            <strong>Perkalian Matriks</strong>
+            <p class="small-muted">Jika A berukuran m×p dan B berukuran p×n, hasil A×B berukuran m×n. Elemen (i,j) dihitung sebagai jumlah hasil kali baris i A dengan kolom j B.</p>
+          </div>
+          <div>
+            <strong>Transpose</strong>
+            <p class="small-muted">Transpose (Aᵀ) menukar baris menjadi kolom: ukuran m×n menjadi n×m.</p>
+          </div>
+          <div>
+            <strong>Determinan</strong>
+            <p class="small-muted">Hanya terdefinisi untuk matriks bujursangkar (n×n). Di sini tersedia untuk n ≤ 3 dengan langkah perhitungan.</p>
+          </div>
+        </div>
+      </article>
+
+      <article id="interaktif" class="section">
+        <h2>Kalkulator Matriks Interaktif</h2>
+        <p class="small-muted">Pilih ukuran, masukkan elemen, lalu pilih operasi.</p>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+          <div style="background:rgba(255,255,255,0.02);padding:10px;border-radius:10px">
+            <label class="inline">Ukuran A:
+              <select id="rowsA" onchange="renderMatrixInputs('A')">
+                <option value="1">1×1</option>
+                <option value="2" selected>2×2</option>
+                <option value="3">3×3</option>
+              </select>
+            </label>
+            <label class="inline">Kolom A:
+              <select id="colsA" onchange="renderMatrixInputs('A')">
+                <option value="1">1</option>
+                <option value="2" selected>2</option>
+                <option value="3">3</option>
+              </select>
+            </label>
+          </div>
+
+          <div style="background:rgba(255,255,255,0.02);padding:10px;border-radius:10px">
+            <label class="inline">Ukuran B:
+              <select id="rowsB" onchange="renderMatrixInputs('B')">
+                <option value="1">1×1</option>
+                <option value="2" selected>2×2</option>
+                <option value="3">3×3</option>
+              </select>
+            </label>
+            <label class="inline">Kolom B:
+              <select id="colsB" onchange="renderMatrixInputs('B')">
+                <option value="1">1</option>
+                <option value="2" selected>2</option>
+                <option value="3">3</option>
+              </select>
+            </label>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:8px">
+            <button class="op-btn" onclick="setExample()">Isi Contoh</button>
+            <button class="op-btn" onclick="clearMatrices()">Bersihkan</button>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:14px;flex-wrap:wrap">
+          <div style="min-width:220px">
+            <h3>A</h3>
+            <div id="matrixA" class="matrix-input"></div>
+          </div>
+
+          <div style="min-width:220px">
+            <h3>B</h3>
+            <div id="matrixB" class="matrix-input"></div>
+          </div>
+
+          <div style="flex:1;min-width:260px">
+            <h3>Hasil / Langkah</h3>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div class="ops">
+                <button class="op-btn" onclick="compute('add')">A + B</button>
+                <button class="op-btn" onclick="compute('sub')">A - B</button>
+                <button class="op-btn" onclick="compute('mul')">A × B</button>
+                <button class="op-btn" onclick="compute('transA')">Aᵀ</button>
+                <button class="op-btn" onclick="compute('transB')">Bᵀ</button>
+                <button class="op-btn" onclick="compute('detA')">det(A)</button>
+                <button class="op-btn" onclick="compute('detB')">det(B)</button>
+              </div>
+              <pre id="output" class="output">Hasil akan tampil di sini...</pre>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article id="contoh" class="section">
+        <h2>Contoh & Langkah Penyelesaian</h2>
+        <div class="example">
+          <strong>Contoh Perkalian:</strong>
+          <pre class="output">A = [1 2]
+    [3 4]
+B = [2 0]
+    [1 2]
+A×B = ?
+Langkah: (A×B)_{1,1} = 1×2 + 2×1 = 4
+(A×B)_{1,2} = 1×0 + 2×2 = 4
+... sehingga A×B = [4 4; 10 8]
+</pre>
+        </div>
+      </article>
+
+      <article id="latihan" class="section">
+        <h2>Latihan</h2>
+        <div class="practice">
+          <div class="problem">
+            <div>
+              <div><strong>1.</strong> Hitung A + B jika A = [1 0; 2 3], B = [0 5; -1 2]</div>
+              <div class="small-muted">(Matriks 2×2)</div>
+            </div>
+            <div><button class="btn" onclick="showAnswer(1)">Tampilkan Jawaban</button></div>
+          </div>
+
+          <div class="problem">
+            <div>
+              <div><strong>2.</strong> Hitung A×B jika A = [1 2; 0 1], B = [2 0; 1 3]</div>
+              <div class="small-muted">(Matriks 2×2)</div>
+            </div>
+            <div><button class="btn" onclick="showAnswer(2)">Tampilkan Jawaban</button></div>
+          </div>
+
+          <div class="problem">
+            <div>
+              <div><strong>3.</strong> Hitung det(A) jika A = [4 7; 2 6]</div>
+              <div class="small-muted">(Matriks 2×2)</div>
+            </div>
+            <div><button class="btn" onclick="showAnswer(3)">Tampilkan Jawaban</button></div>
+          </div>
+
+        </div>
+        <div id="answers" style="margin-top:12px"></div>
+      </article>
+
+      <article id="tambahan" class="section">
+        <h2>Latihan Tambahan & Penyelesaian</h2>
+        <div class="practice">
+          <div class="problem" style="flex-direction:column;align-items:flex-start">
+            <div>
+              <div><strong>🧠 1.</strong> TKA SMA — Deret Aritmetika</div>
+              <div class="small-muted">Soal: Jika suku ke-2 = 10 dan suku ke-5 = 25, tentukan beda (d) dan suku ke-12.</div>
+            </div>
+            <div style="margin-top:8px;width:100%" class="example">
+              <strong>Penyelesaian:</strong>
+              <pre class="output">Diketahui: U2 = a + d = 10
+U5 = a + 4d = 25
+
+Kurangkan kedua persamaan:
+(U5 - U2) = 3d = 15  ->  d = 5
+
+Masukkan kembali untuk cari a:
+a + d = 10 -> a = 10 - 5 = 5
+
+Suku ke-12:
+U12 = a + 11d = 5 + 11*5 = 5 + 55 = 60
+
+Jadi: d = 5,  U12 = 60</pre>
+            </div>
+          </div>
+
+          <div class="problem" style="flex-direction:column;align-items:flex-start">
+            <div>
+              <div><strong>🟦 2.</strong> Matriks (Penjumlahan, Pengurangan, Transpose)</div>
+              <div class="small-muted">Soal: P = [4 2; 1 3], Q = [2 5; -1 4]. Hitung P+Q, P-Q, dan P^T.</div>
+            </div>
+            <div style="margin-top:8px;width:100%" class="example">
+              <strong>Penyelesaian:</strong>
+              <pre class="output">P + Q = [4+2   2+5]    = [6  7]
+        [1+(-1) 3+4]      [0  7]
+
+P - Q = [4-2   2-5]    = [2  -3]
+        [1-(-1) 3-4]    = [2  -1]
+
+Transpose P^T = [4 1]
+              [2 3]</pre>
+            </div>
+          </div>
+
+          <div class="problem" style="flex-direction:column;align-items:flex-start">
+            <div>
+              <div><strong>🟥 3.</strong> Matriks (Perkalian & Invers)</div>
+              <div class="small-muted">Soal: R = [1 2; 3 4], S = [2 0; 1 2]. Hitung R x S dan invers R.</div>
+            </div>
+            <div style="margin-top:8px;width:100%" class="example">
+              <strong>Penyelesaian:</strong>
+              <pre class="output">Perkalian R x S:
+(RxS)11 = 1*2 + 2*1 = 2 + 2 = 4
+(RxS)12 = 1*0 + 2*2 = 0 + 4 = 4
+(RxS)21 = 3*2 + 4*1 = 6 + 4 = 10
+(RxS)22 = 3*0 + 4*2 = 0 + 8 = 8
+
+Jadi RxS = [4 4; 10 8]
+
+Invers matriks R:
+det(R) = 1*4 - 2*3 = 4 - 6 = -2 (not zero => invers ada)
+
+R inverse = (1/det) * [ d  -b
+                        -c  a ]
+         = (-1/2) * [4  -2
+                      -3  1 ]
+         = [ -2    1  ]
+           [ 3/2  -1/2 ]
+
+Jadi R^{-1} = [ -2   1 ; 3/2  -1/2 ]</pre>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </section>
+  </main>
+
+  <footer>
+    Dibuat otomatis — Sumber: Materi Matematika. Ingin fitur lain (mis. ekspor, langkah detil lebih panjang)? Klik tombol "Reset" di samping.
+  <article class="section" id="soal">
+<h2>Soal dan Penyelesaian</h2>
+<pre class="output">
+1. Deret Aritmetika SMA:
+a=4, U3=16 -> d=6, U10=58
+
+2. Matriks A+B dan A-B:
+A+B = [3 3;0 6]
+A-B = [1 3;2 2]
+
+3. CxD dan Determinan:
+C×D = [13 9;13 19]
+det =130
+</pre>
+</article>
+</footer>
+
+  <script>
+    // Utility functions
+    function createMatrixContainer(id, rows, cols){
+      const container = document.getElementById(id);
+      container.innerHTML = '';
+      for(let r=0;r<rows;r++){
+        const row = document.createElement('div'); row.className='matrix-row';
+        for(let c=0;c<cols;c++){
+          const input = document.createElement('input');
+          input.type='number'; input.step='any'; input.value='0'; input.className='mat';
+          input.dataset.r = r; input.dataset.c = c;
+          row.appendChild(input);
+        }
+        container.appendChild(row);
+      }
+    }
+
+    function renderMatrixInputs(which){
+      const r = Number(document.getElementById('rows'+which).value);
+      const c = Number(document.getElementById('cols'+which).value);
+      createMatrixContainer('matrix'+which, r, c);
+    }
+
+    // init
+    renderMatrixInputs('A'); renderMatrixInputs('B');
+
+    function readMatrix(id){
+      const el = document.getElementById(id);
+      const rows = el.children.length; if(rows===0) return [];
+      const cols = el.children[0].children.length;
+      const M = Array.from({length:rows},(,i)=>Array.from({length:cols},(,j)=>{
+        const inp = el.children[i].children[j]; return Number(inp.value) || 0;
+      }));
+      return M;
+    }
+
+    function matrixToString(M){
+      if(!M || M.length===0) return '[]';
+      return M.map(r=>'[ '+r.map(x=>Number.isInteger(x)?x:parseFloat(x).toFixed(2)).join('  ')+' ]').join('\n');
+    }
+
+    function addMatrices(A,B){
+      if(A.length!==B.length || A[0].length!==B[0].length) return null;
+      return A.map((row,i)=>row.map((_,j)=>A[i][j]+B[i][j]));
+    }
+    function subMatrices(A,B){
+      if(A.length!==B.length || A[0].length!==B[0].length) return null;
+      return A.map((row,i)=>row.map((_,j)=>A[i][j]-B[i][j]));
+    }
+    function mulMatrices(A,B){
+      if(A[0].length !== B.length) return null;
+      const m=A.length, n=B[0].length, p=A[0].length;
+      const R = Array.from({length:m},()=>Array.from({length:n},()=>0));
+      for(let i=0;i<m;i++) for(let j=0;j<n;j++) for(let k=0;k<p;k++) R[i][j]+=A[i][k]*B[k][j];
+      return R;
+    }
+    function transpose(M){
+      return M[0].map((_,c)=>M.map(r=>r[c]));
+    }
+    function det(M){
+      const n = M.length; if(M.some(r=>r.length!==n)) return null;
+      if(n===1) return M[0][0];
+      if(n===2) return M[0][0]*M[1][1]-M[0][1]*M[1][0];
+      if(n===3){
+        const a=M;
+        return a[0][0](a[1][1]*a[2][2]-a[1][2]*a[2][1]) - a[0][1](a[1][0]a[2][2]-a[1][2]*a[2][0]) + a[0][2](a[1][0]*a[2][1]-a[1][1]*a[2][0]);
+      }
+      return null; // tidak mendukung >3
+    }
+
+    function compute(op){
+      const A = readMatrix('matrixA'); const B = readMatrix('matrixB');
+      const out = document.getElementById('output');
+      try{
+        if(op==='add'){
+          const R = addMatrices(A,B);
+          if(!R) throw 'Ukuran tidak sama untuk penjumlahan.';
+          out.textContent = 'A + B =\n'+matrixToString(R);
+        } else if(op==='sub'){
+          const R = subMatrices(A,B);
+          if(!R) throw 'Ukuran tidak sama untuk pengurangan.';
+          out.textContent = 'A - B =\n'+matrixToString(R);
+        } else if(op==='mul'){
+          const R = mulMatrices(A,B);
+          if(!R) throw 'Jumlah kolom A harus sama dengan jumlah baris B untuk perkalian.';
+          out.textContent = 'A × B =\n'+matrixToString(R);
+        } else if(op==='transA'){
+          out.textContent = "Aᵀ =\n"+matrixToString(transpose(A));
+        } else if(op==='transB'){
+          out.textContent = "Bᵀ =\n"+matrixToString(transpose(B));
+        } else if(op==='detA'){
+          const d = det(A);
+          if(d===null) throw 'Determinant hanya untuk matriks bujursangkar ukuran ≤ 3.';
+          out.textContent = 'det(A) = '+d;
+        } else if(op==='detB'){
+          const d = det(B);
+          if(d===null) throw 'Determinant hanya untuk matriks bujursangkar ukuran ≤ 3.';
+          out.textContent = 'det(B) = '+d;
+        }
+      } catch(e){ out.textContent = 'Error: '+e }
+    }
+
+    function setExample(){
+      // contoh 2x2
+      document.getElementById('rowsA').value='2'; document.getElementById('colsA').value='2';
+      document.getElementById('rowsB').value='2'; document.getElementById('colsB').value='2';
+      renderMatrixInputs('A'); renderMatrixInputs('B');
+      const aEls = document.querySelectorAll('#matrixA input'); const bEls = document.querySelectorAll('#matrixB input');
+      const valsA=[1,2,3,4], valsB=[2,0,1,2];
+      aEls.forEach((el,i)=>el.value=valsA[i]); bEls.forEach((el,i)=>el.value=valsB[i]);
+    }
+
+    function clearMatrices(){
+      document.querySelectorAll('.matrix-input input').forEach(i=>i.value='0');
+      document.getElementById('output').textContent='Hasil akan tampil di sini...';
+    }
+
+    function resetAll(){ location.reload(); }
+
+    function showAnswer(n){
+      const answers = document.getElementById('answers');
+      if(n===1){ answers.innerHTML = '<div class="example"><strong>Jawaban 1:</strong><pre class="output">A+B = [1 0; 2 3] + [0 5; -1 2] = [1 5; 1 5]</pre></div>' }
+      if(n===2){ answers.innerHTML = '<div class="example"><strong>Jawaban 2:</strong><pre class="output">A×B = [1 2;0 1] × [2 0;1 3] = [1*2+2*1  1*0+2*3; 0*2+1*1  0*0+1*3] = [4 6;1 3]</pre></div>' }
+      if(n===3){ answers.innerHTML = '<div class="example"><strong>Jawaban 3:</strong><pre class="output">det([4 7;2 6]) = 4*6 - 7*2 = 24 - 14 = 10</pre></div>' }
+    }
+
+    function scrollToSection(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+  </script>
+</body>
+</html>
